@@ -14,7 +14,7 @@ const List = memo(function List({
     <article>
       <h2 className='h2-title'>{title}</h2>
 
-      <div className='mt-2 h-[500px] max-w-[400px] flex-1 overflow-scroll rounded-xl bg-gray-700/40 px-3 py-5 sm:w-[400px]'>
+      <div className='mt-4 h-[500px] max-w-[400px] flex-1 overflow-scroll rounded-xl bg-gray-700/40 px-3 py-5 sm:w-[400px]'>
         <div className='flex flex-col gap-4'>
           {tasks.length > 0 ? (
             tasks.map(task => <Task key={task.id} {...task} />)
