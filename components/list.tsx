@@ -2,7 +2,13 @@ import Task from './task'
 import { TaskT, useTaskStore } from '@/lib/store'
 import { memo } from 'react'
 
-const List = memo(({ tasks, title }: { tasks: TaskT[]; title: string }) => {
+const List = memo(function List({
+  tasks,
+  title
+}: {
+  tasks: TaskT[]
+  title: string
+}) {
   const hasSrarch = useTaskStore(state => state.search.length > 0)
   return (
     <article>
