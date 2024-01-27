@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.h2-title {
+  @apply ml-4 text-lg font-medium md:text-xl;
+}
