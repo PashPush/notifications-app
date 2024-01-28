@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from './ui/textarea'
+import ClassNames from 'classnames'
 
 import { useTaskStore, Status } from '@/lib/store'
 import { DateTimePicker } from './ui/TimePicker/date-time-picker'
@@ -10,47 +11,45 @@ import { useEffect, useState } from 'react'
 import { getInitialDate } from '@/lib/utils'
 
 export default function NotificationForm() {
-  const { addTask, editingTaskId, setEditingTaskId, editTask, setSearch } =
-    useTaskStore(state => state)
+  const {
+    addTask,
+    editingTaskId,
+    setEditingTaskId,
+    editTask,
+    setFilter,
+    setSearch,
+    tasks
+  } = useTaskStore(state => state)
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [date, setDate] = useState<Date>(() => getInitialDate())
-  const [error, setError] = useState(false)
+
+  const isInvalidDate = date < new Date()
+
+  const clearForm = () => {
+    setTitle('')
+    setDescription('')
+    setDate(getInitialDate())
+  }
 
   useEffect(() => {
     if (editingTaskId) {
-      const task = useTaskStore
-        .getState()
-        .tasks.find(task => task.id === editingTaskId)
+      const task = tasks.find(task => task.id === editingTaskId)
       if (task) {
         setTitle(task.title)
         setDescription(task.description || '')
         setDate(new Date(task.date))
       }
     } else {
-      setTitle('')
-      setDescription('')
-      setDate(getInitialDate())
+      clearForm()
     }
   }, [editingTaskId])
 
-  useEffect(() => {
-    if (date < new Date()) {
-      setError(true)
-    } else {
-      setError(false)
-    }
-  }, [date])
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setError(false)
 
-    if (date < new Date()) {
-      setError(true)
-      return
-    }
+    if (isInvalidDate) return
 
     if (!title) return
 
@@ -68,16 +67,13 @@ export default function NotificationForm() {
       addTask(title, date, description)
     }
 
-    setTitle('')
-    setDescription('')
+    clearForm()
     setSearch('')
-    setDate(getInitialDate())
+    setFilter(Status.PROCESS)
   }
 
   const handleCancel = () => {
-    setTitle('')
-    setDescription('')
-    setDate(getInitialDate())
+    clearForm()
     setEditingTaskId(null)
   }
 
@@ -111,7 +107,9 @@ export default function NotificationForm() {
           />
         </div>
         <div
-          className={`flex flex-col items-center gap-4 ${error && 'outline outline-2 outline-red-500'}`}
+          className={ClassNames('flex flex-col items-center gap-4', {
+            'outline outline-2 outline-red-500': isInvalidDate
+          })}
         >
           <DateTimePicker date={date} setDate={setDate} />
         </div>

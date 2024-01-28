@@ -4,9 +4,12 @@ import { useTaskStore } from '@/lib/store'
 import { Cross1Icon } from '@radix-ui/react-icons'
 
 const Search = () => {
-  const { search, setSearch } = useTaskStore(state => state)
-
+  const search = useTaskStore(state => state.search)
+  const setSearch = useTaskStore(state => state.setSearch)
   const [searchInput, setSearchInput] = useState('')
+  useEffect(() => {
+    !search && setSearchInput('')
+  }, [search])
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined

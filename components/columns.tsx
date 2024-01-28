@@ -9,7 +9,8 @@ import { Sidebar } from './sidebar'
 
 export default function Columns() {
   const { sort, search, filter, tasks, setSort, setFilter, setEditingTaskId } =
-    useTaskStore(state => state)
+    useTaskStore()
+
   const filteredTasks = useMemo(
     () =>
       tasks
@@ -29,6 +30,8 @@ export default function Columns() {
               return a.title < b.title ? -1 : 1
             case Sorts.TITLEDESC:
               return a.title > b.title ? -1 : 1
+            default:
+              return 0
           }
         }),
     [tasks, filter, sort, search]
@@ -42,6 +45,8 @@ export default function Columns() {
         return 'Пропущенные напоминания'
       case Status.DONE:
         return 'Выполненные напоминания'
+      default:
+        return ''
     }
   }
 

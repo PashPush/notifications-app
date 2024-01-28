@@ -4,6 +4,8 @@ import * as React from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import * as ToastPrimitives from '@radix-ui/react-toast'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Button } from '@/components/ui/button'
+import { Status, TaskT } from '@/lib/store'
 
 import { cn } from '@/lib/utils'
 
@@ -110,6 +112,40 @@ type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>
 
 type ToastActionElement = React.ReactElement<typeof ToastAction>
 
+function ShowDoneToast({
+  task,
+  changeStatus,
+  postponeTask
+}: {
+  task: TaskT
+  changeStatus: (id: string, status: Status) => void
+  postponeTask: (id: string) => void
+}) {
+  return (
+    <ToastAction altText='Ok' asChild>
+      <div className='flex flex-col gap-2'>
+        <Button
+          size='sm'
+          onClick={() => {
+            changeStatus(task.id, Status.DONE)
+          }}
+          data-test-id='toaster-done'
+        >
+          Ок
+        </Button>
+        <Button
+          size='sm'
+          variant='ghost'
+          onClick={() => postponeTask(task.id)}
+          data-test-id='toaster-postpone'
+        >
+          Напомнить позже
+        </Button>
+      </div>
+    </ToastAction>
+  )
+}
+
 export {
   type ToastProps,
   type ToastActionElement,
@@ -119,5 +155,6 @@ export {
   ToastTitle,
   ToastDescription,
   ToastClose,
-  ToastAction
+  ToastAction,
+  ShowDoneToast
 }
