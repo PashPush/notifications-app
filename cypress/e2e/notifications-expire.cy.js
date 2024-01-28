@@ -1,4 +1,4 @@
-describe('Task done e2e', () => {
+describe('Task expire e2e', () => {
   it('should disappear by itself (because got stale - 1 hour or more left)', () => {
     cy.visit('/')
 

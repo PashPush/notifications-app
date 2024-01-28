@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ru'>
-      <body className='flex h-full items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-400 to-slate-900 md:h-screen'>
+      <body className='grey-gradient flex h-full items-center justify-center md:h-screen'>
         {children}
       </body>
     </html>

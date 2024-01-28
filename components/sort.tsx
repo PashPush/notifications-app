@@ -7,12 +7,12 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { SortT, useTaskStore } from '@/lib/store'
+import { Sorts, useTaskStore } from '@/lib/store'
 
 export default function Sort() {
   const { setSort, setEditingTaskId } = useTaskStore(state => state)
 
-  const handleSortChange = (e: SortT) => {
+  const handleSortChange = (e: Sorts) => {
     setSort(e)
     setEditingTaskId(null)
   }
@@ -25,10 +25,10 @@ export default function Sort() {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Отсортировать по:</SelectLabel>
-          <SelectItem value='dateAsc'>Ближние даты</SelectItem>
-          <SelectItem value='dateDesc'>Далёкие даты</SelectItem>
-          <SelectItem value='titleAsc'>От А до Я</SelectItem>
-          <SelectItem value='titleDesc'>От Я до А</SelectItem>
+          <SelectItem value={Sorts.DATEASC}>Ближние даты</SelectItem>
+          <SelectItem value={Sorts.DATEDESC}>Далёкие даты</SelectItem>
+          <SelectItem value={Sorts.TITLEASC}>От А до Я</SelectItem>
+          <SelectItem value={Sorts.TITLEDESC}>От Я до А</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

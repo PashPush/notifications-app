@@ -1,12 +1,12 @@
 'use client'
 import { APP_NAME } from '@/lib/constants'
-import { useTaskStore } from '@/lib/store'
+import { Status, useTaskStore } from '@/lib/store'
 import { useEffect } from 'react'
 
 const useTitleRefresher = () => {
   const tasks = useTaskStore(state => state.tasks)
   const newNotifications = tasks.filter(
-    task => task.status === 'PROCESS' && task.isStale
+    task => task.status === Status.PROCESS && task.isStale
   )
 
   useEffect(() => {
