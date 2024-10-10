@@ -10,9 +10,8 @@ import { useEffect, useState } from 'react'
 import { getInitialDate } from '@/lib/utils'
 
 export default function NotificationForm() {
-  const { addTask, editingTaskId, setEditingTaskId, editTask } = useTaskStore(
-    state => state
-  )
+  const { addTask, editingTaskId, setEditingTaskId, editTask, setSearch } =
+    useTaskStore(state => state)
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -71,6 +70,7 @@ export default function NotificationForm() {
 
     setTitle('')
     setDescription('')
+    setSearch('')
     setDate(getInitialDate())
   }
 
