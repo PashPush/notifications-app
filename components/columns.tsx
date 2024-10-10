@@ -16,7 +16,8 @@ export default function Columns() {
         .filter(
           task =>
             task.status === filter &&
-            (task.title.includes(search) || task.description?.includes(search))
+            (task.title.includes(search.toLowerCase()) ||
+              task.description?.includes(search.toLowerCase()))
         )
         .sort((a, b) => {
           if (sort === 'dateAsc') return compareAsc(a.date, b.date)
