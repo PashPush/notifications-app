@@ -18,7 +18,6 @@ const Search = () => {
     }, 300)
 
     return () => clearTimeout(timer)
-    // eslint-disable-next-line
   }, [searchInput])
 
   return (

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useTaskStore } from '@/lib/store' 
+import { useTaskStore, Status } from '@/lib/store'
 import { useToast } from './use-toast'
 import { ToastAction } from '@/components/ui/toast'
 import { Button } from '@/components/ui/button'
@@ -17,7 +17,7 @@ const useReminder = () => {
       tasks.forEach(task => {
         if (
           !task.isStale &&
-          task.status === 'PROCESS' &&
+          task.status === Status.PROCESS &&
           new Date(task.date).getTime() <= now
         ) {
           toast({
@@ -30,7 +30,7 @@ const useReminder = () => {
                   <Button
                     size='sm'
                     onClick={() => {
-                      changeStatus(task.id, 'DONE')
+                      changeStatus(task.id, Status.DONE)
                     }}
                     data-test-id='toaster-done'
                   >
@@ -59,10 +59,10 @@ const useReminder = () => {
       tasks.forEach(task => {
         if (
           task.isStale &&
-          task.status === 'PROCESS' &&
+          task.status === Status.PROCESS &&
           new Date(task.date).getTime() + 60 * 60 * 1000 <= now
         ) {
-          changeStatus(task.id, 'EXPIRED')
+          changeStatus(task.id, Status.EXPIRED)
           clearInterval(expiredInterval)
         }
       })
@@ -72,7 +72,6 @@ const useReminder = () => {
       clearInterval(staleInterval)
       clearInterval(expiredInterval)
     }
-    // eslint-disable-next-line
   }, [tasks])
 }
 

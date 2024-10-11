@@ -12,3 +12,6 @@ body {
 .h2-title {
   @apply ml-4 text-lg font-medium md:text-xl;
 }
+.grey-gradient {
+  @apply bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-400 to-slate-900;
+}

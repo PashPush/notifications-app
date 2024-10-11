@@ -7,12 +7,12 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { StatusT, useTaskStore } from '@/lib/store'
+import { Status, useTaskStore } from '@/lib/store'
 
 export default function Filter() {
   const { setFilter, setEditingTaskId } = useTaskStore(state => state)
 
-  const handleFilterChange = (e: StatusT) => {
+  const handleFilterChange = (e: Status) => {
     setFilter(e)
     setEditingTaskId(null)
   }
@@ -25,9 +25,9 @@ export default function Filter() {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Отфильтровать по:</SelectLabel>
-          <SelectItem value='PROCESS'>Ожидаемые</SelectItem>
-          <SelectItem value='DONE'>Выполненные</SelectItem>
-          <SelectItem value='EXPIRED'>Пропущенные</SelectItem>
+          <SelectItem value={Status.PROCESS}>Ожидаемые</SelectItem>
+          <SelectItem value={Status.DONE}>Выполненные</SelectItem>
+          <SelectItem value={Status.EXPIRED}>Пропущенные</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

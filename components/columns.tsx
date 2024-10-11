@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useMemo } from 'react'
 import List from './list'
-import { StatusT, useTaskStore } from '@/lib/store'
+import { Sorts, Status, useTaskStore } from '@/lib/store'
 import { compareAsc, compareDesc } from 'date-fns'
 import useReminder from '@/hooks/use-reminder'
 import useTitleRefresher from '@/hooks/use-title-refresher'
@@ -20,22 +20,27 @@ export default function Columns() {
               task.description?.includes(search.toLowerCase()))
         )
         .sort((a, b) => {
-          if (sort === 'dateAsc') return compareAsc(a.date, b.date)
-          if (sort === 'dateDesc') return compareDesc(a.date, b.date)
-          if (sort === 'titleAsc') return a.title < b.title ? -1 : 1
-          if (sort === 'titleDesc') return a.title > b.title ? -1 : 1
-          return 0
+          switch (sort) {
+            case Sorts.DATEASC:
+              return compareAsc(a.date, b.date)
+            case Sorts.DATEDESC:
+              return compareDesc(a.date, b.date)
+            case Sorts.TITLEASC:
+              return a.title < b.title ? -1 : 1
+            case Sorts.TITLEDESC:
+              return a.title > b.title ? -1 : 1
+          }
         }),
     [tasks, filter, sort, search]
   )
 
-  function getTitleForList(status: StatusT) {
+  function getTitleForList(status: Status) {
     switch (status) {
-      case 'PROCESS':
+      case Status.PROCESS:
         return 'Ожидаемые напоминания'
-      case 'EXPIRED':
+      case Status.EXPIRED:
         return 'Пропущенные напоминания'
-      case 'DONE':
+      case Status.DONE:
         return 'Выполненные напоминания'
     }
   }
@@ -45,10 +50,9 @@ export default function Columns() {
 
   useEffect(() => {
     useTaskStore.persist.rehydrate()
-    setSort('dateAsc')
-    setFilter('PROCESS')
+    setSort(Sorts.DATEASC)
+    setFilter(Status.PROCESS)
     setEditingTaskId(null)
-    // eslint-disable-next-line
   }, [])
 
   return (

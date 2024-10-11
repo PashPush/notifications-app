@@ -1,6 +1,6 @@
 'use client'
 
-import { add, format } from 'date-fns'
+import { add } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 
 import { Calendar as CalendarIcon } from 'lucide-react'
@@ -54,7 +54,14 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
         >
           <CalendarIcon className='mr-2 size-4 text-slate-900' />
           {date ? (
-            format(date, 'PPP HH:mm', { locale: ru })
+            Intl.DateTimeFormat('ru-RU', {
+              day: 'numeric',
+              weekday: 'short',
+              month: 'long',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric'
+            }).format(date)
           ) : (
             <span className='text-slate-900'>Когда?</span>
           )}

@@ -3,23 +3,32 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import { nanoid } from 'nanoid'
 import { addMinutes, setSeconds } from 'date-fns'
 
-export type StatusT = 'PROCESS' | 'EXPIRED' | 'DONE'
+export enum Status {
+  PROCESS = 'PROCESS',
+  EXPIRED = 'EXPIRED',
+  DONE = 'DONE'
+}
+
+export enum Sorts {
+  DATEASC = 'dateAsc',
+  DATEDESC = 'dateDesc',
+  TITLEASC = 'titleAsc',
+  TITLEDESC = 'titleDesc'
+}
 
 export type TaskT = {
   id: string
   title: string
   description?: string
   date: Date
-  status: StatusT
+  status: Status
   isStale: boolean
 }
 
-export type SortT = 'dateAsc' | 'dateDesc' | 'titleAsc' | 'titleDesc'
-
 export type State = {
   tasks: TaskT[]
-  sort: SortT
-  filter: StatusT
+  sort: Sorts
+  filter: Status
   search: string
   editingTaskId: string | null
 }
@@ -30,10 +39,10 @@ export type Actions = {
   editTask: (id: string, updatedTask: TaskT) => void
   setEditingTaskId: (id: string | null) => void
   orderTasks: (orderedTasks: TaskT[]) => void
-  setSort: (sort: SortT) => void
-  setFilter: (filter: StatusT) => void
+  setSort: (sort: Sorts) => void
+  setFilter: (filter: Status) => void
   setSearch: (search: string) => void
-  changeStatus: (id: string, status: StatusT) => void
+  changeStatus: (id: string, status: Status) => void
   postponeTask: (id: string) => void
   setIsStale: (id: string) => void
 }
@@ -41,8 +50,8 @@ export const useTaskStore = create<State & Actions>()(
   persist(
     set => ({
       tasks: [],
-      sort: 'dateAsc',
-      filter: 'PROCESS',
+      sort: Sorts.DATEASC,
+      filter: Status.PROCESS,
       search: '',
       editingTaskId: null,
       addTask: (title: string, date: Date, description?: string) => {
@@ -53,7 +62,7 @@ export const useTaskStore = create<State & Actions>()(
               title,
               description,
               date,
-              status: 'PROCESS',
+              status: Status.PROCESS,
               isStale: false
             },
             ...state.tasks
@@ -69,23 +78,24 @@ export const useTaskStore = create<State & Actions>()(
       },
       editTask: (id: string, updatedTask: TaskT) =>
         set(state => {
-          const filteredState = state.tasks.filter(task => task.id !== id)
           return {
-            tasks: [updatedTask, ...filteredState]
+            tasks: state.tasks.map(task =>
+              task.id !== id ? task : updatedTask
+            )
           }
         }),
       setEditingTaskId: (id: string | null) => set({ editingTaskId: id }),
       orderTasks: (orderedTasks: TaskT[]) =>
         set(state => ({ ...state, tasks: [...orderedTasks] })),
-      setSort: (sort: SortT) => set({ sort }),
-      setFilter: (filter: StatusT) => set({ filter }),
+      setSort: (sort: Sorts) => set({ sort }),
+      setFilter: (filter: Status) => set({ filter }),
       setSearch: (search: string) => set({ search }),
-      changeStatus: (id: string, status: StatusT) =>
+      changeStatus: (id: string, status: Status) =>
         set(state => {
-          const doneTask = state.tasks.find(task => task.id === id) as TaskT
-          const filteredState = state.tasks.filter(task => task.id !== id)
           return {
-            tasks: [{ ...doneTask, status: status }, ...filteredState]
+            tasks: state.tasks.map(task =>
+              task.id === id ? { ...task, status } : task
+            )
           }
         }),
       postponeTask: id =>
@@ -95,7 +105,7 @@ export const useTaskStore = create<State & Actions>()(
               ? {
                   ...task,
                   isStale: false,
-                  status: 'PROCESS',
+                  status: Status.PROCESS,
                   date: new Date(addMinutes(setSeconds(new Date(), 0), 10))
                 }
               : task

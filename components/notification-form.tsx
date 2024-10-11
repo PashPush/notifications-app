@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from './ui/textarea'
 
-import { useTaskStore } from '@/lib/store'
+import { useTaskStore, Status } from '@/lib/store'
 import { DateTimePicker } from './ui/TimePicker/date-time-picker'
 import { useEffect, useState } from 'react'
 import { getInitialDate } from '@/lib/utils'
@@ -60,7 +60,7 @@ export default function NotificationForm() {
         title,
         description,
         date,
-        status: 'PROCESS',
+        status: Status.PROCESS,
         isStale: false
       })
       setEditingTaskId(null)
