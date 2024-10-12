@@ -6,49 +6,39 @@ import { Textarea } from './ui/textarea'
 
 import { useTaskStore, Status } from '@/lib/store'
 import { DateTimePicker } from './ui/TimePicker/date-time-picker'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getInitialDate } from '@/lib/utils'
 
 export default function NotificationForm() {
-  const { addTask, editingTaskId, setEditingTaskId, editTask, setSearch } =
-    useTaskStore(state => state)
+  const {
+    addTask,
+    editingTaskId,
+    setEditingTaskId,
+    editTask,
+    setSearch,
+    tasks
+  } = useTaskStore()
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [date, setDate] = useState<Date>(() => getInitialDate())
-  const [error, setError] = useState(false)
+
+  const isError = useMemo(() => date < new Date(), [date])
 
   useEffect(() => {
-    if (editingTaskId) {
-      const task = useTaskStore
-        .getState()
-        .tasks.find(task => task.id === editingTaskId)
-      if (task) {
-        setTitle(task.title)
-        setDescription(task.description || '')
-        setDate(new Date(task.date))
-      }
-    } else {
-      setTitle('')
-      setDescription('')
-      setDate(getInitialDate())
-    }
-  }, [editingTaskId])
+    const task = tasks.find(task => task.id === editingTaskId)
 
-  useEffect(() => {
-    if (date < new Date()) {
-      setError(true)
-    } else {
-      setError(false)
+    if (editingTaskId && task) {
+      setTitle(task.title)
+      setDescription(task.description || '')
+      setDate(new Date(task.date))
     }
-  }, [date])
+  }, [editingTaskId, tasks])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setError(false)
 
-    if (date < new Date()) {
-      setError(true)
+    if (isError) {
       return
     }
 
@@ -68,16 +58,10 @@ export default function NotificationForm() {
       addTask(title, date, description)
     }
 
-    setTitle('')
-    setDescription('')
     setSearch('')
-    setDate(getInitialDate())
   }
 
   const handleCancel = () => {
-    setTitle('')
-    setDescription('')
-    setDate(getInitialDate())
     setEditingTaskId(null)
   }
 
@@ -111,7 +95,7 @@ export default function NotificationForm() {
           />
         </div>
         <div
-          className={`flex flex-col items-center gap-4 ${error && 'outline outline-2 outline-red-500'}`}
+          className={`flex flex-col items-center gap-4 ${isError && 'outline outline-2 outline-red-500'}`}
         >
           <DateTimePicker date={date} setDate={setDate} />
         </div>
