@@ -10,10 +10,12 @@ import {
 import { Status, useTaskStore } from '@/lib/store'
 
 export default function Filter() {
-  const { setFilter, setEditingTaskId } = useTaskStore(state => state)
+  const setFilter = useTaskStore(state => state.setFilter)
+  const setEditingTaskId = useTaskStore(state => state.setEditingTaskId)
+  const filter = useTaskStore(state => state.filter)
 
-  const handleFilterChange = (e: Status) => {
-    setFilter(e)
+  const handleFilterChange = (filter: Status) => {
+    setFilter(filter)
     setEditingTaskId(null)
   }
 

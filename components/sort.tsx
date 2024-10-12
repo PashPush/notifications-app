@@ -10,10 +10,11 @@ import {
 import { Sorts, useTaskStore } from '@/lib/store'
 
 export default function Sort() {
-  const { setSort, setEditingTaskId } = useTaskStore(state => state)
+  const setSort = useTaskStore(state => state.setSort)
+  const setEditingTaskId = useTaskStore(state => state.setEditingTaskId)
 
-  const handleSortChange = (e: Sorts) => {
-    setSort(e)
+  const handleSortChange = (sort: Sorts) => {
+    setSort(sort)
     setEditingTaskId(null)
   }
 

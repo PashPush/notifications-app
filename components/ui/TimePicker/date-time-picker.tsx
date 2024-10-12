@@ -33,12 +33,15 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
     setDate(newDateFull)
   }
 
-  const today = new Date()
-  const yesterday = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  )
+  const isDateDisabled = (date: Date) => {
+    const today = new Date()
+    const yesterday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    )
+    return date < yesterday || date < new Date('1900-01-01')
+  }
 
   return (
     <Popover>
@@ -66,7 +69,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
           mode='single'
           selected={date}
           onSelect={d => handleSelect(d)}
-          disabled={date => date < yesterday || date < new Date('1900-01-01')}
+          disabled={isDateDisabled}
           initialFocus
         />
         <div className='border-border flex justify-center border-t p-3'>
