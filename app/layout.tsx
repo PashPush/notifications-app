@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ru'>
-      <body className='grey-gradient flex h-full items-center justify-center md:h-screen'>
+      <body className='grey-gradient flex h-full items-center justify-center md:h-screen '>
         {children}
       </body>
     </html>
