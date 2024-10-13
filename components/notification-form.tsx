@@ -6,9 +6,14 @@ import { Textarea } from './ui/textarea'
 import ClassNames from 'classnames'
 
 import { useTaskStore, Status } from '@/lib/store'
-import { DateTimePicker } from './ui/TimePicker/date-time-picker'
 import { useEffect, useState } from 'react'
 import { getInitialDate } from '@/lib/utils'
+import dynamic from 'next/dynamic'
+
+const DateTimePicker = dynamic(
+  () => import('./ui/TimePicker/date-time-picker').then(m => m.DateTimePicker),
+  { ssr: false }
+)
 
 export default function NotificationForm() {
   const {
