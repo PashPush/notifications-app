@@ -3,16 +3,27 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from './ui/textarea'
-import ClassNames from 'classnames'
 
 import { useTaskStore, Status } from '@/lib/store'
 import { useEffect, useState } from 'react'
-import { getInitialDate } from '@/lib/utils'
+import { cn, getInitialDate } from '@/lib/utils'
 import dynamic from 'next/dynamic'
+import { CalendarIcon } from 'lucide-react'
 
 const DateTimePicker = dynamic(
   () => import('./ui/TimePicker/date-time-picker').then(m => m.DateTimePicker),
-  { ssr: false }
+  {
+    loading: () => (
+      <Button
+        variant='outline'
+        className='justify-сеnter w-full text-left font-normal text-slate-900 '
+      >
+        <CalendarIcon className='mr-2 size-4 text-slate-900' />
+        Выбери дату и время
+      </Button>
+    ),
+    ssr: false
+  }
 )
 
 export default function NotificationForm() {
@@ -112,9 +123,10 @@ export default function NotificationForm() {
           />
         </div>
         <div
-          className={ClassNames('flex flex-col items-center gap-4', {
-            'outline outline-2 outline-red-500': isInvalidDate
-          })}
+          className={cn(
+            'justify-сеnter w-full text-left font-normal text-slate-900 ',
+            isInvalidDate && 'outline outline-2 outline-red-500'
+          )}
         >
           <DateTimePicker date={date} setDate={setDate} />
         </div>
